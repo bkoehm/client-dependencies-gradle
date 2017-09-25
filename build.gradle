@@ -2,9 +2,23 @@ import groovy.io.FileType
 
 buildscript {
     repositories {
-        maven {
-            url 'https://plugins.gradle.org/m2/'
+        mavenLocal()
+        // If using a Maven proxy, put the property settings in
+        // ~/.gradle/gradle.properties for default_proxy_url,
+        // default_proxy_username and default_proxy_password.
+        if (project.hasProperty("default_proxy_url")) {
+            maven {
+                url project.property("default_proxy_url")
+                credentials {
+                    username project.property("default_proxy_username")
+                    password project.property("default_proxy_password")
+                }
+            }
         }
+        jcenter()
+        maven { url "https://repo.grails.org/grails/core" }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        mavenCentral()
     }
     dependencies {
         classpath 'com.gradle.publish:plugin-publish-plugin:0.9.4'
@@ -17,7 +31,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'idea'
 apply plugin: 'codenarc'
 apply plugin: 'com.gradle.plugin-publish'
-apply plugin: 'com.jfrog.bintray'
+//apply plugin: 'com.jfrog.bintray'
 
 ext {
     artifactId = 'client-dependencies'
@@ -28,10 +42,25 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 group = 'com.craigburke.gradle'
-version = '1.4.1'
+version = '1.4.0-UCB1'
 
 repositories {
+    mavenLocal()
+    // If using a Maven proxy, put the property settings in
+    // ~/.gradle/gradle.properties for default_proxy_url,
+    // default_proxy_username and default_proxy_password.
+    if (project.hasProperty("default_proxy_url")) {
+        maven {
+            url project.property("default_proxy_url")
+            credentials {
+                username project.property("default_proxy_username")
+                password project.property("default_proxy_password")
+            }
+        }
+    }
     jcenter()
+    maven { url "https://repo.grails.org/grails/core" }
+    mavenCentral()
 }
 
 dependencies {
