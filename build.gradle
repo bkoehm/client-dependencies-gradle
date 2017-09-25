@@ -79,6 +79,9 @@ codenarc {
     configFile = file("${rootProject.projectDir}/config/codenarc/rules.groovy")
 }
 
+
+publish.dependsOn assemble
+publishToMavenLocal.dependsOn assemble
 publishing {
     publications {
         maven(MavenPublication) {
@@ -115,8 +118,21 @@ publishing {
             artifact javadocJar
         }
     }
+    repositories {
+        maven {
+            // Put the property settings in ~/.gradle/gradle.properties for
+            // default_deploy_url, default_deploy_lib_repo,
+            // default_deploy_username and default_deploy_password.
+            url "${project.property('default_deploy_url')}/${default_deploy_lib_repo}"
+            credentials {
+                username project.property("default_deploy_user")
+                password project.property("default_deploy_password")
+            }
+        }
+    }
 }
 
+/*
 bintray {
     user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : ''
     key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : ''
@@ -137,6 +153,7 @@ bintray {
         }
     }
 }
+*/
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
